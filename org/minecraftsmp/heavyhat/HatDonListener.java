@@ -4,10 +4,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import org.bukkit.entity.Player;
@@ -34,13 +32,35 @@ public class HatDonListener implements Listener {
 		return true;
 	}
 	
-	@EventHandler
+/*	@EventHandler
 	public void onPlayerInventoryClick(InventoryClickEvent event) {
 		if (event.getWhoClicked() instanceof Player) {
 			if (isArmorEmpty(event.getWhoClicked().getInventory())) {
 				((Player)event.getWhoClicked()).setAllowFlight(false);
 				plugin.note(((Player)event.getWhoClicked()).getName() + " tried to put on armor while flying.");
 			}
+		}
+	}*/
+	
+	@EventHandler
+	public void onCloseInventory(InventoryCloseEvent event) {
+
+		if (!(event.getPlayer() instanceof Player)) {return;}
+		
+		PlayerInventory inv = event.getPlayer().getInventory();
+		if (
+			(
+				(inv.getHelmet() != null) ||
+				(inv.getChestplate() != null) ||
+				(inv.getLeggings() != null) ||
+				(inv.getBoots() != null)
+			) &&
+			
+			(((Player)event.getPlayer()).getAllowFlight())
+		) {
+			plugin.note(event.getPlayer().getName() + " put on armor while flying.");
+			((Player)event.getPlayer()).setAllowFlight(false);
+			plugin.msg(((Player)event.getPlayer()), plugin.tooHeavyToStayAloft());
 		}
 	}
 	
@@ -51,7 +71,8 @@ public class HatDonListener implements Listener {
 		)) {
 			event.setCancelled(true);
 			event.getPlayer().setAllowFlight(false);
-			plugin.note(event.getPlayer().getName() + " tried to fly in armor.");
+			plugin.note(event.getPlayer().getName() + " tried to fly while wearing armor.");
+			plugin.msg(((Player)event.getPlayer()), plugin.tooHeavyToTakeOff());
 		}
 	}
 }

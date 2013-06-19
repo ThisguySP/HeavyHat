@@ -2,33 +2,53 @@ package org.minecraftsmp.heavyhat;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.bukkit.entity.Player;
+
 import org.minecraftsmp.heavyhat.HatDonListener;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public final class HeavyHat extends JavaPlugin {
-	private boolean d;
-	private HatDonListener HatDonListener;
+	private boolean d, n, i;
+	private String inflight, preflight;
+	private HatDonListener hatlistener;
 	
 	public void onEnable() {
-		HatDonListener = new HatDonListener(this);
-		getServer().getPluginManager().registerEvents(HatDonListener, this);
+		hatlistener = new HatDonListener(this);
+		getServer().getPluginManager().registerEvents(hatlistener, this);
 		if (!Files.exists(Paths.get("plugins/HeavyHat/config.yml"))) {
 			this.saveDefaultConfig();
 		}
-		d = this.getConfig().getBoolean("debug");
-		dnote("Enabled in debug mode.");
+		d = this.getConfig().getBoolean("verbosity.debug");
+		n = this.getConfig().getBoolean("verbosity.normal");
+		i = this.getConfig().getBoolean("verbosity.ingame");
+		preflight = this.getConfig().getString("lang.preflight");
+		inflight = this.getConfig().getString("lang.inflight");
+		dnote("Enabled debug messages.");
+		if (!n) {getLogger().info("Normal-level console messages supressed.");}
 	}
 	
 	public void onDisable() {
-		HatDonListener.releaseListeners();
+		hatlistener.releaseListeners();
 	}
 	
 	
 	
+	public String tooHeavyToTakeOff() {
+		return preflight;
+	}
+	
+	public String tooHeavyToStayAloft() {
+		return inflight;
+	}
+	
+	public void msg(Player player, String message) {
+		player.sendRawMessage(message);
+	}
+	
 	public void note(String message) {
-		getLogger().info(message);
+		if (n) {getLogger().info(message);}
 	}
 	
 	public void dnote(String message) {
