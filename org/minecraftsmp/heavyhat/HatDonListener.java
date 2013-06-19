@@ -37,9 +37,9 @@ public class HatDonListener implements Listener {
 	@EventHandler
 	public void onPlayerInventoryClick(InventoryClickEvent event) {
 		if (event.getWhoClicked() instanceof Player) {
-			plugin.dnote("Instance of Player");
 			if (isArmorEmpty(event.getWhoClicked().getInventory())) {
-				plugin.dnote("Armor slot(s) empty");
+				((Player)event.getWhoClicked()).setAllowFlight(false);
+				plugin.note(((Player)event.getWhoClicked()).getName() + " tried to put on armor while flying.");
 			}
 		}
 	}
