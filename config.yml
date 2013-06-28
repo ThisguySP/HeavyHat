@@ -6,7 +6,7 @@ verbosity:
   ingame: true
   #Sent to the player to inform them that they may not fly.
 lang:
-  inflight: §cYou're too heavy to stay aloft!
+  inflight: &cYou're too heavy to stay aloft!
   #Sent when the player puts armor on mid-flight (on inventory close).
-  preflight: §cYou're too heavy to take off!
+  preflight: &cYou're too heavy to take off!
   #Sent when the player toggles flight while wearing armor.

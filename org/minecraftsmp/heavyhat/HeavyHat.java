@@ -23,8 +23,8 @@ public final class HeavyHat extends JavaPlugin {
 		d = this.getConfig().getBoolean("verbosity.debug");
 		n = this.getConfig().getBoolean("verbosity.normal");
 		i = this.getConfig().getBoolean("verbosity.ingame");
-		preflight = this.getConfig().getString("lang.preflight");
-		inflight = this.getConfig().getString("lang.inflight");
+		preflight = this.getConfig().getString("lang.preflight").replace("&", "§");
+		inflight = this.getConfig().getString("lang.inflight").replace("&", "§");
 		dnote("Enabled debug messages.");
 		if (!n) {getLogger().info("Normal-level console messages supressed.");}
 	}
